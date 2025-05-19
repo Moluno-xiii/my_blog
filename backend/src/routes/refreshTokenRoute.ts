@@ -38,8 +38,10 @@ refreshTokenRoute.get(
         httpOnly: true,
         sameSite: "lax",
         maxAge: 15 * 60 * 1000,
-        secure: process.env.NODE_ENV === "production",
+        secure: process.env.NODE_ENV === "production" ? true : false,
       });
+
+      res.status(200).send({ token: newAccessToken });
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Unauthorized token.";

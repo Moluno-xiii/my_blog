@@ -1,16 +1,26 @@
 import { createClient } from "redis";
-import { RedisStore } from "connect-redis";
 
-const redisClient = createClient({
-  url: process.env.REDIS_URL,
-});
-redisClient.connect().catch(console.error);
-
-const redisStore = new RedisStore({
-  client: redisClient,
-  prefix: "blogApp",
+const client = createClient({
+  username: process.env.REDIS_USERNAME,
+  password: process.env.REDIS_PASSWORD,
+  socket: {
+    host: process.env.REDIS_HOST,
+    port: Number(process.env.REDIS_PORT),
+  },
 });
 
-export { redisClient };
+client.on("error", (err) => {
+  console.error("Redis Client Error", err);
+});
 
-export default redisStore;
+const connectRedis = async () => {
+  try {
+    await client.connect();
+  } catch (err) {
+    console.error("Failed to connect redis", err);
+  }
+};
+
+connectRedis();
+
+export { client as redisClient };

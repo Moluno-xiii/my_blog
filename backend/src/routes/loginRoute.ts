@@ -1,8 +1,7 @@
 import { Router, Request, Response } from "express";
+import { login } from "../utils/auth";
 const loginRoute = Router();
 
-loginRoute.get("/", (req: Request, res: Response) => {
-  res.json({ message: "this is the login route" });
-});
+loginRoute.post("/", login);
 
 export default loginRoute;

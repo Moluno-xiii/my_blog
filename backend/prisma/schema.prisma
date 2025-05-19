@@ -35,7 +35,7 @@ model comments {
   id           String   @id @default(uuid())
   date_added   DateTime @default(now())
   date_updated DateTime @updatedAt
-  comment_by   String
+  comment_by   String   @unique @db.Citext
   body         String
 
   post    posts  @relation(fields: [post_id], references: [id])

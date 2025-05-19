@@ -15,7 +15,6 @@ async function signUp(req: Request, res: Response, next: NextFunction) {
       },
     });
     res.status(200).json({ message: "Signup successful!" });
-    console.log("newly created user:", user);
     return;
   } catch (err) {
     res.status(403).send({
@@ -27,6 +26,11 @@ async function signUp(req: Request, res: Response, next: NextFunction) {
 
 async function login(req: Request, res: Response, next: NextFunction) {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return;
+  }
+
   try {
     const user = await prisma.author.findUnique({
       where: {
@@ -35,7 +39,7 @@ async function login(req: Request, res: Response, next: NextFunction) {
     });
 
     if (!user) {
-      res.status(401).json({ message: "Incorrect credentials" });
+      res.status(401).json({ error: "Incorrect credentials" });
       return;
     }
 
@@ -45,15 +49,16 @@ async function login(req: Request, res: Response, next: NextFunction) {
     );
 
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Incorrect credentials" });
+      res.status(401).json({ error: "Incorrect credentials" });
+      return;
     }
 
-    const payload = { userId: user.id };
+    const payload = { userId: user.id, email };
     const accessToken = jwt.sign(
       payload,
       process.env.JWT_ACCESS_SECRET as string,
       {
-        expiresIn: "15m",
+        expiresIn: "1d",
       }
     );
     const refreshToken = jwt.sign(
@@ -62,23 +67,28 @@ async function login(req: Request, res: Response, next: NextFunction) {
       { expiresIn: "30d" }
     );
 
-    await redisClient.set(`session:${user.id}`, refreshToken);
+    // await redisClient.set(`session:${user.id}`, refreshToken);
+    await redisClient.set(`session:${user.id}`, accessToken);
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 15 * 60 * 1000,
-    });
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    // res.cookie("accessToken", accessToken, {
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    //   secure: process.env.NODE_ENV === "production" ? true : false,
+    //   maxAge: 15 * 60 * 1000,
+    //   path: "/",
+    // });
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    //   secure: process.env.NODE_ENV === "production" ? true : false,
+    //   path: "/",
+    //   maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
 
-    res.status(200).send({ message: "Login successful" });
+    res.status(200).send({ message: "Login successful", accessToken, user });
   } catch (err) {
     next(err);
   }
 }
+
+export { signUp, login };
