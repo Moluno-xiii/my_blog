@@ -5,9 +5,10 @@ import express, { NextFunction, Request, Response } from "express";
 import { errorHandler } from "./middlewares/errorHandler";
 import adminRoute from "./routes/adminRoute";
 import loginRoute from "./routes/loginRoute";
-import refreshTokenRoute from "./routes/refreshTokenRoute";
 import signupRoute from "./routes/signupRoute";
 import logoutRoute from "./routes/logoutRoute";
+import postsRoute from "./routes/postsRoute";
+import verifyJWT from "./middlewares/verifyJWT";
 
 const corsOptions = {
   origin: process.env.APP_URL || "http://localhost:5173",
@@ -24,15 +25,11 @@ app.get("/", (req: Request, res: Response, next: NextFunction) => {
   res.send("welcome to the home page");
 });
 
-// app.use((req, res, next) => {
-//   console.log("Cookies received:", req.cookies);
-//   next();
-// });
-app.use("/login", loginRoute);
-app.use("/signup", signupRoute);
-app.use("/refresh", refreshTokenRoute);
 app.use("/admin", adminRoute);
-app.use("/logout", logoutRoute);
+app.use("/login", loginRoute);
+app.use("/logout", verifyJWT, logoutRoute);
+app.use("/posts", postsRoute);
+app.use("/signup", signupRoute);
 
 app.use(errorHandler);
 app.use((req: Request, res: Response, next: NextFunction) => {

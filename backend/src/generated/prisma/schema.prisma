@@ -27,6 +27,7 @@ model posts {
   date_created DateTime @default(now())
   title        String
   body         String
+  isPostDraft  Boolean
 
   comments comments[]
 }
@@ -35,9 +36,21 @@ model comments {
   id           String   @id @default(uuid())
   date_added   DateTime @default(now())
   date_updated DateTime @updatedAt
-  comment_by   String
+  comment_by   String   @unique
   body         String
 
   post    posts  @relation(fields: [post_id], references: [id])
   post_id String
+}
+
+enum tags {
+  TYPESCIPT
+  REACTJS
+  EXPRESSJS
+  NODEJS
+  FRONTEND
+  BACKEND
+  FULLSTACK
+  AUTHENTICATION
+  JWT
 }

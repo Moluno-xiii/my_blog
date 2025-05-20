@@ -16,6 +16,13 @@ import { Route as IndexImport } from './routes/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthLoginImport } from './routes/auth/login'
+import { Route as AdminCreatePostImport } from './routes/admin/create-post'
+import { Route as AdminMyPostsRouteImport } from './routes/admin/my-posts/route'
+import { Route as AdminEditPostIdImport } from './routes/admin/edit-post/$id'
+import { Route as AdminMyPostsPostsIndexImport } from './routes/admin/my-posts/posts/index'
+import { Route as AdminMyPostsDraftsIndexImport } from './routes/admin/my-posts/drafts/index'
+import { Route as AdminMyPostsPostsIdImport } from './routes/admin/my-posts/posts/$id'
+import { Route as AdminMyPostsDraftsIdImport } from './routes/admin/my-posts/drafts/$id'
 
 // Create/Update Routes
 
@@ -49,6 +56,48 @@ const AuthLoginRoute = AuthLoginImport.update({
   getParentRoute: () => AuthRouteRoute,
 } as any)
 
+const AdminCreatePostRoute = AdminCreatePostImport.update({
+  id: '/admin/create-post',
+  path: '/admin/create-post',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminMyPostsRouteRoute = AdminMyPostsRouteImport.update({
+  id: '/admin/my-posts',
+  path: '/admin/my-posts',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminEditPostIdRoute = AdminEditPostIdImport.update({
+  id: '/admin/edit-post/$id',
+  path: '/admin/edit-post/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AdminMyPostsPostsIndexRoute = AdminMyPostsPostsIndexImport.update({
+  id: '/posts/',
+  path: '/posts/',
+  getParentRoute: () => AdminMyPostsRouteRoute,
+} as any)
+
+const AdminMyPostsDraftsIndexRoute = AdminMyPostsDraftsIndexImport.update({
+  id: '/drafts/',
+  path: '/drafts/',
+  getParentRoute: () => AdminMyPostsRouteRoute,
+} as any)
+
+const AdminMyPostsPostsIdRoute = AdminMyPostsPostsIdImport.update({
+  id: '/posts/$id',
+  path: '/posts/$id',
+  getParentRoute: () => AdminMyPostsRouteRoute,
+} as any)
+
+const AdminMyPostsDraftsIdRoute = AdminMyPostsDraftsIdImport.update({
+  id: '/drafts/$id',
+  path: '/drafts/$id',
+  getParentRoute: () => AdminMyPostsRouteRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -65,6 +114,20 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/my-posts': {
+      id: '/admin/my-posts'
+      path: '/admin/my-posts'
+      fullPath: '/admin/my-posts'
+      preLoaderRoute: typeof AdminMyPostsRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/create-post': {
+      id: '/admin/create-post'
+      path: '/admin/create-post'
+      fullPath: '/admin/create-post'
+      preLoaderRoute: typeof AdminCreatePostImport
       parentRoute: typeof rootRoute
     }
     '/auth/login': {
@@ -88,6 +151,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexImport
       parentRoute: typeof rootRoute
     }
+    '/admin/edit-post/$id': {
+      id: '/admin/edit-post/$id'
+      path: '/admin/edit-post/$id'
+      fullPath: '/admin/edit-post/$id'
+      preLoaderRoute: typeof AdminEditPostIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/admin/my-posts/drafts/$id': {
+      id: '/admin/my-posts/drafts/$id'
+      path: '/drafts/$id'
+      fullPath: '/admin/my-posts/drafts/$id'
+      preLoaderRoute: typeof AdminMyPostsDraftsIdImport
+      parentRoute: typeof AdminMyPostsRouteImport
+    }
+    '/admin/my-posts/posts/$id': {
+      id: '/admin/my-posts/posts/$id'
+      path: '/posts/$id'
+      fullPath: '/admin/my-posts/posts/$id'
+      preLoaderRoute: typeof AdminMyPostsPostsIdImport
+      parentRoute: typeof AdminMyPostsRouteImport
+    }
+    '/admin/my-posts/drafts/': {
+      id: '/admin/my-posts/drafts/'
+      path: '/drafts'
+      fullPath: '/admin/my-posts/drafts'
+      preLoaderRoute: typeof AdminMyPostsDraftsIndexImport
+      parentRoute: typeof AdminMyPostsRouteImport
+    }
+    '/admin/my-posts/posts/': {
+      id: '/admin/my-posts/posts/'
+      path: '/posts'
+      fullPath: '/admin/my-posts/posts'
+      preLoaderRoute: typeof AdminMyPostsPostsIndexImport
+      parentRoute: typeof AdminMyPostsRouteImport
+    }
   }
 }
 
@@ -107,50 +205,131 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface AdminMyPostsRouteRouteChildren {
+  AdminMyPostsDraftsIdRoute: typeof AdminMyPostsDraftsIdRoute
+  AdminMyPostsPostsIdRoute: typeof AdminMyPostsPostsIdRoute
+  AdminMyPostsDraftsIndexRoute: typeof AdminMyPostsDraftsIndexRoute
+  AdminMyPostsPostsIndexRoute: typeof AdminMyPostsPostsIndexRoute
+}
+
+const AdminMyPostsRouteRouteChildren: AdminMyPostsRouteRouteChildren = {
+  AdminMyPostsDraftsIdRoute: AdminMyPostsDraftsIdRoute,
+  AdminMyPostsPostsIdRoute: AdminMyPostsPostsIdRoute,
+  AdminMyPostsDraftsIndexRoute: AdminMyPostsDraftsIndexRoute,
+  AdminMyPostsPostsIndexRoute: AdminMyPostsPostsIndexRoute,
+}
+
+const AdminMyPostsRouteRouteWithChildren =
+  AdminMyPostsRouteRoute._addFileChildren(AdminMyPostsRouteRouteChildren)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/admin/my-posts': typeof AdminMyPostsRouteRouteWithChildren
+  '/admin/create-post': typeof AdminCreatePostRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/edit-post/$id': typeof AdminEditPostIdRoute
+  '/admin/my-posts/drafts/$id': typeof AdminMyPostsDraftsIdRoute
+  '/admin/my-posts/posts/$id': typeof AdminMyPostsPostsIdRoute
+  '/admin/my-posts/drafts': typeof AdminMyPostsDraftsIndexRoute
+  '/admin/my-posts/posts': typeof AdminMyPostsPostsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/admin/my-posts': typeof AdminMyPostsRouteRouteWithChildren
+  '/admin/create-post': typeof AdminCreatePostRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin': typeof AdminIndexRoute
+  '/admin/edit-post/$id': typeof AdminEditPostIdRoute
+  '/admin/my-posts/drafts/$id': typeof AdminMyPostsDraftsIdRoute
+  '/admin/my-posts/posts/$id': typeof AdminMyPostsPostsIdRoute
+  '/admin/my-posts/drafts': typeof AdminMyPostsDraftsIndexRoute
+  '/admin/my-posts/posts': typeof AdminMyPostsPostsIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteRouteWithChildren
+  '/admin/my-posts': typeof AdminMyPostsRouteRouteWithChildren
+  '/admin/create-post': typeof AdminCreatePostRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/admin/': typeof AdminIndexRoute
+  '/admin/edit-post/$id': typeof AdminEditPostIdRoute
+  '/admin/my-posts/drafts/$id': typeof AdminMyPostsDraftsIdRoute
+  '/admin/my-posts/posts/$id': typeof AdminMyPostsPostsIdRoute
+  '/admin/my-posts/drafts/': typeof AdminMyPostsDraftsIndexRoute
+  '/admin/my-posts/posts/': typeof AdminMyPostsPostsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/auth/login' | '/auth/signup' | '/admin'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/admin/my-posts'
+    | '/admin/create-post'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/admin'
+    | '/admin/edit-post/$id'
+    | '/admin/my-posts/drafts/$id'
+    | '/admin/my-posts/posts/$id'
+    | '/admin/my-posts/drafts'
+    | '/admin/my-posts/posts'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/auth/login' | '/auth/signup' | '/admin'
-  id: '__root__' | '/' | '/auth' | '/auth/login' | '/auth/signup' | '/admin/'
+  to:
+    | '/'
+    | '/auth'
+    | '/admin/my-posts'
+    | '/admin/create-post'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/admin'
+    | '/admin/edit-post/$id'
+    | '/admin/my-posts/drafts/$id'
+    | '/admin/my-posts/posts/$id'
+    | '/admin/my-posts/drafts'
+    | '/admin/my-posts/posts'
+  id:
+    | '__root__'
+    | '/'
+    | '/auth'
+    | '/admin/my-posts'
+    | '/admin/create-post'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/admin/'
+    | '/admin/edit-post/$id'
+    | '/admin/my-posts/drafts/$id'
+    | '/admin/my-posts/posts/$id'
+    | '/admin/my-posts/drafts/'
+    | '/admin/my-posts/posts/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  AdminMyPostsRouteRoute: typeof AdminMyPostsRouteRouteWithChildren
+  AdminCreatePostRoute: typeof AdminCreatePostRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  AdminEditPostIdRoute: typeof AdminEditPostIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRouteRoute: AuthRouteRouteWithChildren,
+  AdminMyPostsRouteRoute: AdminMyPostsRouteRouteWithChildren,
+  AdminCreatePostRoute: AdminCreatePostRoute,
   AdminIndexRoute: AdminIndexRoute,
+  AdminEditPostIdRoute: AdminEditPostIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -165,7 +344,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/auth",
-        "/admin/"
+        "/admin/my-posts",
+        "/admin/create-post",
+        "/admin/",
+        "/admin/edit-post/$id"
       ]
     },
     "/": {
@@ -178,6 +360,18 @@ export const routeTree = rootRoute
         "/auth/signup"
       ]
     },
+    "/admin/my-posts": {
+      "filePath": "admin/my-posts/route.tsx",
+      "children": [
+        "/admin/my-posts/drafts/$id",
+        "/admin/my-posts/posts/$id",
+        "/admin/my-posts/drafts/",
+        "/admin/my-posts/posts/"
+      ]
+    },
+    "/admin/create-post": {
+      "filePath": "admin/create-post.tsx"
+    },
     "/auth/login": {
       "filePath": "auth/login.tsx",
       "parent": "/auth"
@@ -188,6 +382,25 @@ export const routeTree = rootRoute
     },
     "/admin/": {
       "filePath": "admin/index.tsx"
+    },
+    "/admin/edit-post/$id": {
+      "filePath": "admin/edit-post/$id.tsx"
+    },
+    "/admin/my-posts/drafts/$id": {
+      "filePath": "admin/my-posts/drafts/$id.tsx",
+      "parent": "/admin/my-posts"
+    },
+    "/admin/my-posts/posts/$id": {
+      "filePath": "admin/my-posts/posts/$id.tsx",
+      "parent": "/admin/my-posts"
+    },
+    "/admin/my-posts/drafts/": {
+      "filePath": "admin/my-posts/drafts/index.tsx",
+      "parent": "/admin/my-posts"
+    },
+    "/admin/my-posts/posts/": {
+      "filePath": "admin/my-posts/posts/index.tsx",
+      "parent": "/admin/my-posts"
     }
   }
 }

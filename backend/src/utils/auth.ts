@@ -61,29 +61,8 @@ async function login(req: Request, res: Response, next: NextFunction) {
         expiresIn: "1d",
       }
     );
-    const refreshToken = jwt.sign(
-      payload,
-      process.env.JWT_REFRESH_SECRET as string,
-      { expiresIn: "30d" }
-    );
 
-    // await redisClient.set(`session:${user.id}`, refreshToken);
     await redisClient.set(`session:${user.id}`, accessToken);
-
-    // res.cookie("accessToken", accessToken, {
-    //   httpOnly: true,
-    //   sameSite: "lax",
-    //   secure: process.env.NODE_ENV === "production" ? true : false,
-    //   maxAge: 15 * 60 * 1000,
-    //   path: "/",
-    // });
-    // res.cookie("refreshToken", refreshToken, {
-    //   httpOnly: true,
-    //   sameSite: "lax",
-    //   secure: process.env.NODE_ENV === "production" ? true : false,
-    //   path: "/",
-    //   maxAge: 7 * 24 * 60 * 60 * 1000,
-    // });
 
     res.status(200).send({ message: "Login successful", accessToken, user });
   } catch (err) {

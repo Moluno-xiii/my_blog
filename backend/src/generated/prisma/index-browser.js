@@ -132,7 +132,8 @@ exports.Prisma.PostsScalarFieldEnum = {
   id: 'id',
   date_created: 'date_created',
   title: 'title',
-  body: 'body'
+  body: 'body',
+  isPostDraft: 'isPostDraft'
 };
 
 exports.Prisma.CommentsScalarFieldEnum = {

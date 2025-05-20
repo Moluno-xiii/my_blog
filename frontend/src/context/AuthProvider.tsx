@@ -9,6 +9,7 @@ import {
 } from "react";
 import axiosInstance from "../lib/axiosInstance";
 import { handleError } from "../lib/helpers";
+import toast from "react-hot-toast";
 
 interface User {
   id: string;
@@ -19,8 +20,8 @@ interface User {
 }
 
 interface AuthProviderTypes {
-  user: User | null;
-  setUser: Dispatch<SetStateAction<User | null>>;
+  user: User | null | undefined;
+  setUser: Dispatch<SetStateAction<User | null | undefined>>;
   logout: () => void;
 }
 
@@ -31,7 +32,7 @@ const AuthContext = createContext<AuthProviderTypes>({
 });
 
 const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null | undefined>(undefined);
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
@@ -44,9 +45,12 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }
     }
 
-    if (accessToken) {
-      getUser();
+    if (!accessToken) {
+      setUser(null);
+      return;
     }
+
+    getUser();
   }, [accessToken]);
 
   const logout = async () => {
@@ -55,11 +59,8 @@ const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       localStorage.removeItem("accessToken");
       setUser(null);
     } catch (err: unknown) {
-      const status = (err as { response: { status: string } })?.response
-        ?.status;
-      console.log(status);
       const message = handleError(err, "response");
-      console.error("unexpected error", message);
+      toast.error(message);
     }
   };
 

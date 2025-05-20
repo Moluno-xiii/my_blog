@@ -3,6 +3,7 @@ import axios from "axios";
 import type { FormEvent } from "react";
 import useAuth from "../../context/AuthProvider";
 import { handleError } from "../../lib/helpers";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/auth/login")({
   component: RouteComponent,
@@ -20,40 +21,20 @@ function RouteComponent() {
     try {
       const response = await axios.post("http://localhost:3000/login", data);
       localStorage.setItem("accessToken", String(response.data.accessToken));
-      // localStorage.setItem("refreshToken", String(response.data.refreshToken));
       setUser(response.data.user);
       navigate({ to: "/admin", replace: true });
-      // use context to manage user state.
     } catch (err) {
       const message = handleError(err, "response");
-      console.error("unexpected error", message);
+      toast.error(message);
     }
   }
-
-  // async function test() {
-  //   try {
-  //     const response = await axiosInstance.post("/admin");
-
-  //     console.log("fetch result", response);
-  //   } catch (err: unknown) {
-  //     const status = (err as { response: { status: string } })?.response
-  //       ?.status;
-  //     console.log(status);
-  //     const message = handleError(err, "response");
-  //     console.error("unexpected error", message);
-  //     console.error(err);
-  //   }
-  // }
 
   return (
     <>
       {user ? (
         <div className="flex flex-col items-center justify-center gap-y-2">
           <p>Welcome back, {user.email}</p>
-          <button
-            className="w-40 cursor-pointer rounded-md bg-indigo-600 p-2 transition-all duration-300 hover:bg-indigo-600/70"
-            onClick={logout}
-          >
+          <button className="btn" onClick={logout}>
             logout
           </button>
         </div>
@@ -83,10 +64,7 @@ function RouteComponent() {
               name="password"
             />
           </section>
-          <button
-            type="submit"
-            className="w-40 cursor-pointer rounded-md bg-indigo-600 p-2 transition-all duration-300 hover:bg-indigo-600/70"
-          >
+          <button type="submit" className="btn">
             Submit
           </button>
         </form>

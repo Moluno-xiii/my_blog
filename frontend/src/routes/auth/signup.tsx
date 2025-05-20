@@ -1,6 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import axios from "axios";
 import { useState, type FormEvent } from "react";
+import { handleError } from "../../lib/helpers";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/auth/signup")({
   component: RouteComponent,
@@ -25,7 +27,8 @@ function RouteComponent() {
       await axios.post("http://localhost:3000/signup", data);
       navigate({ to: "/auth/login" });
     } catch (err) {
-      console.error(err);
+      const message = handleError(err, "response");
+      toast.error(message);
     }
   }
 

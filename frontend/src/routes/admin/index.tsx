@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import useAuth from "../../context/AuthProvider";
 import ProtectedRoute from "../../components/ProtectedRoute";
 
@@ -12,12 +12,12 @@ function RouteComponent() {
     <ProtectedRoute>
       <div>
         <p>Welome back, {user?.email}</p>
-        <button
-          className="w-40 cursor-pointer rounded-md bg-indigo-600 p-2 transition-all duration-300 hover:bg-indigo-600/70"
-          onClick={logout}
-        >
+        <button className="btn-error" onClick={logout}>
           logout
         </button>
+        <Link className="btn" to="/admin/create-post">
+          Create post
+        </Link>
       </div>
     </ProtectedRoute>
   );

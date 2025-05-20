@@ -15,6 +15,15 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+@layer {
+  .btn {
+    @apply w-40 cursor-pointer rounded-md bg-indigo-600 p-2 text-center capitalize transition-all duration-300 hover:bg-indigo-600/70;
+  }
+  .btn-error {
+    @apply w-40 cursor-pointer rounded-md bg-red-600 p-2 text-center capitalize transition-all duration-300 hover:bg-red-600/70;
+  }
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;

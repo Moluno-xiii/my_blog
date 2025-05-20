@@ -25,8 +25,10 @@ model author {
 model posts {
   id           String   @id @default(uuid())
   date_created DateTime @default(now())
-  title        String
+  date_updated DateTime @updatedAt
+  title        String   @unique
   body         String
+  isPostDraft  Boolean
 
   comments comments[]
 }
@@ -35,7 +37,7 @@ model comments {
   id           String   @id @default(uuid())
   date_added   DateTime @default(now())
   date_updated DateTime @updatedAt
-  comment_by   String   @unique @db.Citext
+  comment_by   String   @unique
   body         String
 
   post    posts  @relation(fields: [post_id], references: [id])

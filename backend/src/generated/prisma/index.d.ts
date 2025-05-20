@@ -30,6 +30,30 @@ export type posts = $Result.DefaultSelection<Prisma.$postsPayload>
 export type comments = $Result.DefaultSelection<Prisma.$commentsPayload>
 
 /**
+ * Enums
+ */
+export namespace $Enums {
+  export const tags: {
+  TYPESCIPT: 'TYPESCIPT',
+  REACTJS: 'REACTJS',
+  EXPRESSJS: 'EXPRESSJS',
+  NODEJS: 'NODEJS',
+  FRONTEND: 'FRONTEND',
+  BACKEND: 'BACKEND',
+  FULLSTACK: 'FULLSTACK',
+  AUTHENTICATION: 'AUTHENTICATION',
+  JWT: 'JWT'
+};
+
+export type tags = (typeof tags)[keyof typeof tags]
+
+}
+
+export type tags = $Enums.tags
+
+export const tags: typeof $Enums.tags
+
+/**
  * ##  Prisma Client ʲˢ
  *
  * Type-safe database client for TypeScript & Node.js
@@ -2091,6 +2115,7 @@ export namespace Prisma {
     date_created: Date | null
     title: string | null
     body: string | null
+    isPostDraft: boolean | null
   }
 
   export type PostsMaxAggregateOutputType = {
@@ -2098,6 +2123,7 @@ export namespace Prisma {
     date_created: Date | null
     title: string | null
     body: string | null
+    isPostDraft: boolean | null
   }
 
   export type PostsCountAggregateOutputType = {
@@ -2105,6 +2131,7 @@ export namespace Prisma {
     date_created: number
     title: number
     body: number
+    isPostDraft: number
     _all: number
   }
 
@@ -2114,6 +2141,7 @@ export namespace Prisma {
     date_created?: true
     title?: true
     body?: true
+    isPostDraft?: true
   }
 
   export type PostsMaxAggregateInputType = {
@@ -2121,6 +2149,7 @@ export namespace Prisma {
     date_created?: true
     title?: true
     body?: true
+    isPostDraft?: true
   }
 
   export type PostsCountAggregateInputType = {
@@ -2128,6 +2157,7 @@ export namespace Prisma {
     date_created?: true
     title?: true
     body?: true
+    isPostDraft?: true
     _all?: true
   }
 
@@ -2208,6 +2238,7 @@ export namespace Prisma {
     date_created: Date
     title: string
     body: string
+    isPostDraft: boolean
     _count: PostsCountAggregateOutputType | null
     _min: PostsMinAggregateOutputType | null
     _max: PostsMaxAggregateOutputType | null
@@ -2232,6 +2263,7 @@ export namespace Prisma {
     date_created?: boolean
     title?: boolean
     body?: boolean
+    isPostDraft?: boolean
     comments?: boolean | posts$commentsArgs<ExtArgs>
     _count?: boolean | PostsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["posts"]>
@@ -2241,6 +2273,7 @@ export namespace Prisma {
     date_created?: boolean
     title?: boolean
     body?: boolean
+    isPostDraft?: boolean
   }, ExtArgs["result"]["posts"]>
 
   export type postsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -2248,6 +2281,7 @@ export namespace Prisma {
     date_created?: boolean
     title?: boolean
     body?: boolean
+    isPostDraft?: boolean
   }, ExtArgs["result"]["posts"]>
 
   export type postsSelectScalar = {
@@ -2255,9 +2289,10 @@ export namespace Prisma {
     date_created?: boolean
     title?: boolean
     body?: boolean
+    isPostDraft?: boolean
   }
 
-  export type postsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date_created" | "title" | "body", ExtArgs["result"]["posts"]>
+  export type postsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "date_created" | "title" | "body" | "isPostDraft", ExtArgs["result"]["posts"]>
   export type postsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     comments?: boolean | posts$commentsArgs<ExtArgs>
     _count?: boolean | PostsCountOutputTypeDefaultArgs<ExtArgs>
@@ -2275,6 +2310,7 @@ export namespace Prisma {
       date_created: Date
       title: string
       body: string
+      isPostDraft: boolean
     }, ExtArgs["result"]["posts"]>
     composites: {}
   }
@@ -2703,6 +2739,7 @@ export namespace Prisma {
     readonly date_created: FieldRef<"posts", 'DateTime'>
     readonly title: FieldRef<"posts", 'String'>
     readonly body: FieldRef<"posts", 'String'>
+    readonly isPostDraft: FieldRef<"posts", 'Boolean'>
   }
     
 
@@ -4233,7 +4270,8 @@ export namespace Prisma {
     id: 'id',
     date_created: 'date_created',
     title: 'title',
-    body: 'body'
+    body: 'body',
+    isPostDraft: 'isPostDraft'
   };
 
   export type PostsScalarFieldEnum = (typeof PostsScalarFieldEnum)[keyof typeof PostsScalarFieldEnum]
@@ -4297,6 +4335,13 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -4377,6 +4422,7 @@ export namespace Prisma {
     date_created?: DateTimeFilter<"posts"> | Date | string
     title?: StringFilter<"posts"> | string
     body?: StringFilter<"posts"> | string
+    isPostDraft?: BoolFilter<"posts"> | boolean
     comments?: CommentsListRelationFilter
   }
 
@@ -4385,6 +4431,7 @@ export namespace Prisma {
     date_created?: SortOrder
     title?: SortOrder
     body?: SortOrder
+    isPostDraft?: SortOrder
     comments?: commentsOrderByRelationAggregateInput
   }
 
@@ -4396,6 +4443,7 @@ export namespace Prisma {
     date_created?: DateTimeFilter<"posts"> | Date | string
     title?: StringFilter<"posts"> | string
     body?: StringFilter<"posts"> | string
+    isPostDraft?: BoolFilter<"posts"> | boolean
     comments?: CommentsListRelationFilter
   }, "id">
 
@@ -4404,6 +4452,7 @@ export namespace Prisma {
     date_created?: SortOrder
     title?: SortOrder
     body?: SortOrder
+    isPostDraft?: SortOrder
     _count?: postsCountOrderByAggregateInput
     _max?: postsMaxOrderByAggregateInput
     _min?: postsMinOrderByAggregateInput
@@ -4417,6 +4466,7 @@ export namespace Prisma {
     date_created?: DateTimeWithAggregatesFilter<"posts"> | Date | string
     title?: StringWithAggregatesFilter<"posts"> | string
     body?: StringWithAggregatesFilter<"posts"> | string
+    isPostDraft?: BoolWithAggregatesFilter<"posts"> | boolean
   }
 
   export type commentsWhereInput = {
@@ -4444,16 +4494,16 @@ export namespace Prisma {
 
   export type commentsWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    comment_by?: string
     AND?: commentsWhereInput | commentsWhereInput[]
     OR?: commentsWhereInput[]
     NOT?: commentsWhereInput | commentsWhereInput[]
     date_added?: DateTimeFilter<"comments"> | Date | string
     date_updated?: DateTimeFilter<"comments"> | Date | string
-    comment_by?: StringFilter<"comments"> | string
     body?: StringFilter<"comments"> | string
     post_id?: StringFilter<"comments"> | string
     post?: XOR<PostsScalarRelationFilter, postsWhereInput>
-  }, "id">
+  }, "id" | "comment_by">
 
   export type commentsOrderByWithAggregationInput = {
     id?: SortOrder
@@ -4540,6 +4590,7 @@ export namespace Prisma {
     date_created?: Date | string
     title: string
     body: string
+    isPostDraft: boolean
     comments?: commentsCreateNestedManyWithoutPostInput
   }
 
@@ -4548,6 +4599,7 @@ export namespace Prisma {
     date_created?: Date | string
     title: string
     body: string
+    isPostDraft: boolean
     comments?: commentsUncheckedCreateNestedManyWithoutPostInput
   }
 
@@ -4556,6 +4608,7 @@ export namespace Prisma {
     date_created?: DateTimeFieldUpdateOperationsInput | Date | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
+    isPostDraft?: BoolFieldUpdateOperationsInput | boolean
     comments?: commentsUpdateManyWithoutPostNestedInput
   }
 
@@ -4564,6 +4617,7 @@ export namespace Prisma {
     date_created?: DateTimeFieldUpdateOperationsInput | Date | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
+    isPostDraft?: BoolFieldUpdateOperationsInput | boolean
     comments?: commentsUncheckedUpdateManyWithoutPostNestedInput
   }
 
@@ -4572,6 +4626,7 @@ export namespace Prisma {
     date_created?: Date | string
     title: string
     body: string
+    isPostDraft: boolean
   }
 
   export type postsUpdateManyMutationInput = {
@@ -4579,6 +4634,7 @@ export namespace Prisma {
     date_created?: DateTimeFieldUpdateOperationsInput | Date | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
+    isPostDraft?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type postsUncheckedUpdateManyInput = {
@@ -4586,6 +4642,7 @@ export namespace Prisma {
     date_created?: DateTimeFieldUpdateOperationsInput | Date | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
+    isPostDraft?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type commentsCreateInput = {
@@ -4732,6 +4789,11 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type CommentsListRelationFilter = {
     every?: commentsWhereInput
     some?: commentsWhereInput
@@ -4747,6 +4809,7 @@ export namespace Prisma {
     date_created?: SortOrder
     title?: SortOrder
     body?: SortOrder
+    isPostDraft?: SortOrder
   }
 
   export type postsMaxOrderByAggregateInput = {
@@ -4754,6 +4817,7 @@ export namespace Prisma {
     date_created?: SortOrder
     title?: SortOrder
     body?: SortOrder
+    isPostDraft?: SortOrder
   }
 
   export type postsMinOrderByAggregateInput = {
@@ -4761,6 +4825,15 @@ export namespace Prisma {
     date_created?: SortOrder
     title?: SortOrder
     body?: SortOrder
+    isPostDraft?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type PostsScalarRelationFilter = {
@@ -4815,6 +4888,10 @@ export namespace Prisma {
     connectOrCreate?: commentsCreateOrConnectWithoutPostInput | commentsCreateOrConnectWithoutPostInput[]
     createMany?: commentsCreateManyPostInputEnvelope
     connect?: commentsWhereUniqueInput | commentsWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type commentsUpdateManyWithoutPostNestedInput = {
@@ -4926,6 +5003,19 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type commentsCreateWithoutPostInput = {
     id?: string
     date_added?: Date | string
@@ -4985,6 +5075,7 @@ export namespace Prisma {
     date_created?: Date | string
     title: string
     body: string
+    isPostDraft: boolean
   }
 
   export type postsUncheckedCreateWithoutCommentsInput = {
@@ -4992,6 +5083,7 @@ export namespace Prisma {
     date_created?: Date | string
     title: string
     body: string
+    isPostDraft: boolean
   }
 
   export type postsCreateOrConnectWithoutCommentsInput = {
@@ -5015,6 +5107,7 @@ export namespace Prisma {
     date_created?: DateTimeFieldUpdateOperationsInput | Date | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
+    isPostDraft?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type postsUncheckedUpdateWithoutCommentsInput = {
@@ -5022,6 +5115,7 @@ export namespace Prisma {
     date_created?: DateTimeFieldUpdateOperationsInput | Date | string
     title?: StringFieldUpdateOperationsInput | string
     body?: StringFieldUpdateOperationsInput | string
+    isPostDraft?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type commentsCreateManyPostInput = {
