@@ -5,6 +5,7 @@ import {
   getPostById,
   getSinglePost,
 } from "../utils/postHelpers";
+import prisma from "../prisma";
 
 const postsRoute = Router();
 
@@ -59,6 +60,41 @@ postsRoute.get(
     try {
       const post = await getPostById(false, req.params.postId);
       res.status(200).json({ post });
+    } catch (err) {
+      nextError(res, next, err);
+    }
+  }
+);
+
+postsRoute.post(
+  "/:postId/comments",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { comment_by, body } = req.body;
+    try {
+      const post = await prisma.comments.create({
+        data: {
+          body,
+          comment_by,
+          post_id: req.params.postId,
+        },
+      });
+      res.status(200).json({ message: "Comment added successfully!" });
+    } catch (err) {
+      nextError(res, next, err);
+    }
+  }
+);
+
+postsRoute.get(
+  "/:postId/comments",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const comments = await prisma.comments.findMany({
+        where: {
+          post_id: req.params.PostId,
+        },
+      });
+      res.status(200).json({ comments });
     } catch (err) {
       nextError(res, next, err);
     }

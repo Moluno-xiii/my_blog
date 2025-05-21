@@ -1,8 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { handleError } from "../../lib/helpers";
-import toast from "react-hot-toast";
-import axiosInstance from "../../lib/axiosInstance";
 import { useState } from "react";
+import { createPost } from "../../lib/posts";
 
 export const Route = createFileRoute("/admin/create-post")({
   component: RouteComponent,
@@ -21,15 +19,10 @@ function RouteComponent() {
       body: string;
     };
     const updatedData = { ...data, isPostDraft };
-    try {
-      const post = await axiosInstance.post("/admin/create-post", updatedData);
+    createPost(updatedData, () => {
       form.reset();
-      toast.success(post.data.message);
       navigate({ to: "/admin/my-posts/posts" });
-    } catch (err: unknown) {
-      const message = handleError(err, "response");
-      toast.error(message);
-    }
+    });
   }
 
   return (

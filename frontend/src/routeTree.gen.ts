@@ -12,8 +12,10 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth/route'
+import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as AdminIndexImport } from './routes/admin/index'
+import { Route as PostIdImport } from './routes/post/$id'
 import { Route as AuthSignupImport } from './routes/auth/signup'
 import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AdminCreatePostImport } from './routes/admin/create-post'
@@ -32,6 +34,12 @@ const AuthRouteRoute = AuthRouteImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AdminRouteRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
@@ -39,8 +47,14 @@ const IndexRoute = IndexImport.update({
 } as any)
 
 const AdminIndexRoute = AdminIndexImport.update({
-  id: '/admin/',
-  path: '/admin/',
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+
+const PostIdRoute = PostIdImport.update({
+  id: '/post/$id',
+  path: '/post/$id',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -57,21 +71,21 @@ const AuthLoginRoute = AuthLoginImport.update({
 } as any)
 
 const AdminCreatePostRoute = AdminCreatePostImport.update({
-  id: '/admin/create-post',
-  path: '/admin/create-post',
-  getParentRoute: () => rootRoute,
+  id: '/create-post',
+  path: '/create-post',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 const AdminMyPostsRouteRoute = AdminMyPostsRouteImport.update({
-  id: '/admin/my-posts',
-  path: '/admin/my-posts',
-  getParentRoute: () => rootRoute,
+  id: '/my-posts',
+  path: '/my-posts',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 const AdminEditPostIdRoute = AdminEditPostIdImport.update({
-  id: '/admin/edit-post/$id',
-  path: '/admin/edit-post/$id',
-  getParentRoute: () => rootRoute,
+  id: '/edit-post/$id',
+  path: '/edit-post/$id',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 const AdminMyPostsPostsIndexRoute = AdminMyPostsPostsIndexImport.update({
@@ -109,6 +123,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -118,17 +139,17 @@ declare module '@tanstack/react-router' {
     }
     '/admin/my-posts': {
       id: '/admin/my-posts'
-      path: '/admin/my-posts'
+      path: '/my-posts'
       fullPath: '/admin/my-posts'
       preLoaderRoute: typeof AdminMyPostsRouteImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AdminRouteImport
     }
     '/admin/create-post': {
       id: '/admin/create-post'
-      path: '/admin/create-post'
+      path: '/create-post'
       fullPath: '/admin/create-post'
       preLoaderRoute: typeof AdminCreatePostImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AdminRouteImport
     }
     '/auth/login': {
       id: '/auth/login'
@@ -144,19 +165,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSignupImport
       parentRoute: typeof AuthRouteImport
     }
+    '/post/$id': {
+      id: '/post/$id'
+      path: '/post/$id'
+      fullPath: '/post/$id'
+      preLoaderRoute: typeof PostIdImport
+      parentRoute: typeof rootRoute
+    }
     '/admin/': {
       id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin'
+      path: '/'
+      fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AdminRouteImport
     }
     '/admin/edit-post/$id': {
       id: '/admin/edit-post/$id'
-      path: '/admin/edit-post/$id'
+      path: '/edit-post/$id'
       fullPath: '/admin/edit-post/$id'
       preLoaderRoute: typeof AdminEditPostIdImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof AdminRouteImport
     }
     '/admin/my-posts/drafts/$id': {
       id: '/admin/my-posts/drafts/$id'
@@ -191,20 +219,6 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-interface AuthRouteRouteChildren {
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthSignupRoute: typeof AuthSignupRoute
-}
-
-const AuthRouteRouteChildren: AuthRouteRouteChildren = {
-  AuthLoginRoute: AuthLoginRoute,
-  AuthSignupRoute: AuthSignupRoute,
-}
-
-const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
-  AuthRouteRouteChildren,
-)
-
 interface AdminMyPostsRouteRouteChildren {
   AdminMyPostsDraftsIdRoute: typeof AdminMyPostsDraftsIdRoute
   AdminMyPostsPostsIdRoute: typeof AdminMyPostsPostsIdRoute
@@ -222,14 +236,48 @@ const AdminMyPostsRouteRouteChildren: AdminMyPostsRouteRouteChildren = {
 const AdminMyPostsRouteRouteWithChildren =
   AdminMyPostsRouteRoute._addFileChildren(AdminMyPostsRouteRouteChildren)
 
+interface AdminRouteRouteChildren {
+  AdminMyPostsRouteRoute: typeof AdminMyPostsRouteRouteWithChildren
+  AdminCreatePostRoute: typeof AdminCreatePostRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  AdminEditPostIdRoute: typeof AdminEditPostIdRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminMyPostsRouteRoute: AdminMyPostsRouteRouteWithChildren,
+  AdminCreatePostRoute: AdminCreatePostRoute,
+  AdminIndexRoute: AdminIndexRoute,
+  AdminEditPostIdRoute: AdminEditPostIdRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
+interface AuthRouteRouteChildren {
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignupRoute: typeof AuthSignupRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignupRoute: AuthSignupRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/my-posts': typeof AdminMyPostsRouteRouteWithChildren
   '/admin/create-post': typeof AdminCreatePostRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
-  '/admin': typeof AdminIndexRoute
+  '/post/$id': typeof PostIdRoute
+  '/admin/': typeof AdminIndexRoute
   '/admin/edit-post/$id': typeof AdminEditPostIdRoute
   '/admin/my-posts/drafts/$id': typeof AdminMyPostsDraftsIdRoute
   '/admin/my-posts/posts/$id': typeof AdminMyPostsPostsIdRoute
@@ -244,6 +292,7 @@ export interface FileRoutesByTo {
   '/admin/create-post': typeof AdminCreatePostRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/post/$id': typeof PostIdRoute
   '/admin': typeof AdminIndexRoute
   '/admin/edit-post/$id': typeof AdminEditPostIdRoute
   '/admin/my-posts/drafts/$id': typeof AdminMyPostsDraftsIdRoute
@@ -255,11 +304,13 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/admin/my-posts': typeof AdminMyPostsRouteRouteWithChildren
   '/admin/create-post': typeof AdminCreatePostRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/post/$id': typeof PostIdRoute
   '/admin/': typeof AdminIndexRoute
   '/admin/edit-post/$id': typeof AdminEditPostIdRoute
   '/admin/my-posts/drafts/$id': typeof AdminMyPostsDraftsIdRoute
@@ -272,12 +323,14 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/auth'
     | '/admin/my-posts'
     | '/admin/create-post'
     | '/auth/login'
     | '/auth/signup'
-    | '/admin'
+    | '/post/$id'
+    | '/admin/'
     | '/admin/edit-post/$id'
     | '/admin/my-posts/drafts/$id'
     | '/admin/my-posts/posts/$id'
@@ -291,6 +344,7 @@ export interface FileRouteTypes {
     | '/admin/create-post'
     | '/auth/login'
     | '/auth/signup'
+    | '/post/$id'
     | '/admin'
     | '/admin/edit-post/$id'
     | '/admin/my-posts/drafts/$id'
@@ -300,11 +354,13 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/auth'
     | '/admin/my-posts'
     | '/admin/create-post'
     | '/auth/login'
     | '/auth/signup'
+    | '/post/$id'
     | '/admin/'
     | '/admin/edit-post/$id'
     | '/admin/my-posts/drafts/$id'
@@ -316,20 +372,16 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  AdminMyPostsRouteRoute: typeof AdminMyPostsRouteRouteWithChildren
-  AdminCreatePostRoute: typeof AdminCreatePostRoute
-  AdminIndexRoute: typeof AdminIndexRoute
-  AdminEditPostIdRoute: typeof AdminEditPostIdRoute
+  PostIdRoute: typeof PostIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  AdminMyPostsRouteRoute: AdminMyPostsRouteRouteWithChildren,
-  AdminCreatePostRoute: AdminCreatePostRoute,
-  AdminIndexRoute: AdminIndexRoute,
-  AdminEditPostIdRoute: AdminEditPostIdRoute,
+  PostIdRoute: PostIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -343,15 +395,22 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/admin",
         "/auth",
+        "/post/$id"
+      ]
+    },
+    "/": {
+      "filePath": "index.tsx"
+    },
+    "/admin": {
+      "filePath": "admin/route.tsx",
+      "children": [
         "/admin/my-posts",
         "/admin/create-post",
         "/admin/",
         "/admin/edit-post/$id"
       ]
-    },
-    "/": {
-      "filePath": "index.tsx"
     },
     "/auth": {
       "filePath": "auth/route.tsx",
@@ -362,6 +421,7 @@ export const routeTree = rootRoute
     },
     "/admin/my-posts": {
       "filePath": "admin/my-posts/route.tsx",
+      "parent": "/admin",
       "children": [
         "/admin/my-posts/drafts/$id",
         "/admin/my-posts/posts/$id",
@@ -370,7 +430,8 @@ export const routeTree = rootRoute
       ]
     },
     "/admin/create-post": {
-      "filePath": "admin/create-post.tsx"
+      "filePath": "admin/create-post.tsx",
+      "parent": "/admin"
     },
     "/auth/login": {
       "filePath": "auth/login.tsx",
@@ -380,11 +441,16 @@ export const routeTree = rootRoute
       "filePath": "auth/signup.tsx",
       "parent": "/auth"
     },
+    "/post/$id": {
+      "filePath": "post/$id.tsx"
+    },
     "/admin/": {
-      "filePath": "admin/index.tsx"
+      "filePath": "admin/index.tsx",
+      "parent": "/admin"
     },
     "/admin/edit-post/$id": {
-      "filePath": "admin/edit-post/$id.tsx"
+      "filePath": "admin/edit-post/$id.tsx",
+      "parent": "/admin"
     },
     "/admin/my-posts/drafts/$id": {
       "filePath": "admin/my-posts/drafts/$id.tsx",

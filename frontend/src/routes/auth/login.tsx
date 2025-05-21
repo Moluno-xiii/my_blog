@@ -22,7 +22,7 @@ function RouteComponent() {
       const response = await axios.post("http://localhost:3000/login", data);
       localStorage.setItem("accessToken", String(response.data.accessToken));
       setUser(response.data.user);
-      navigate({ to: "/admin", replace: true });
+      navigate({ to: "/admin/my-posts/posts", replace: true });
     } catch (err) {
       const message = handleError(err, "response");
       toast.error(message);

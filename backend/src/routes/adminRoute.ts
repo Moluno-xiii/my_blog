@@ -8,9 +8,13 @@ adminRoute.post("/", verifyJWT, (req: Request, res: Response) => {
   res.json({ message: "admin route" });
 });
 
-adminRoute.get("/", verifyJWT, async (req: Request, res: Response) => {
-  res.status(200).json({ user: req.user });
-});
+adminRoute.get(
+  "/",
+  verifyJWT,
+  async (req: Request, res: Response, next: NextFunction) => {
+    res.status(200).json({ user: (req as any).user });
+  }
+);
 
 adminRoute.post(
   "/create-post",

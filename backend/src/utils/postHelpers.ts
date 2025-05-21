@@ -53,6 +53,9 @@ async function getPostById(isPostDraft: boolean, id: string) {
         isPostDraft,
         id,
       },
+      include: {
+        comments: true,
+      },
     });
 
     if (!post) {
@@ -68,4 +71,5 @@ async function getPostById(isPostDraft: boolean, id: string) {
     );
   }
 }
+
 export { nextError, getPost, getPostById, getSinglePost };

@@ -39,7 +39,7 @@ async function login(req: Request, res: Response, next: NextFunction) {
     });
 
     if (!user) {
-      res.status(401).json({ error: "Incorrect credentials" });
+      res.status(401).json({ error: "Incorrect username" });
       return;
     }
 

@@ -1,23 +1,20 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import toast from "react-hot-toast";
-import axiosInstance from "../../../lib/axiosInstance";
-import { handleError } from "../../../lib/helpers";
+import {
+  createFileRoute,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
+import { getSinglePost, updatePost } from "../../../lib/posts";
 
 export const Route = createFileRoute("/admin/edit-post/$id")({
   component: RouteComponent,
   loader: async ({ params }) => {
-    try {
-      const data = await axiosInstance.get(`/posts/singlePost/${params.id}`);
-      return data;
-    } catch (err) {
-      const message = handleError(err, "response");
-      toast.error(message);
-    }
+    return await getSinglePost(params.id);
   },
 });
 
 function RouteComponent() {
   const navigate = useNavigate();
+  const router = useRouter();
   const post = Route.useLoaderData();
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -29,18 +26,15 @@ function RouteComponent() {
       body: string;
     };
     const updatedData = { ...data, isPostDraft: post?.data.post.isPostDraft };
-    try {
-      const updatedPost = await axiosInstance.put(
-        `/admin/update-post/${post?.data.post.id}`,
-        updatedData,
-      );
-      form.reset();
-      toast.success(updatedPost.data.message);
-      navigate({ to: "/admin/my-posts/posts" });
-    } catch (err: unknown) {
-      const message = handleError(err, "response");
-      toast.error(message);
-    }
+    updatePost(
+      updatedData,
+      () => {
+        router.invalidate();
+        navigate({ to: "/admin/my-posts/posts" });
+        form.reset();
+      },
+      post?.data.post.id,
+    );
   }
 
   return (
